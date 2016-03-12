@@ -5,8 +5,8 @@ Notes as I'm learning the Purescript language
 
 psci (the Purescript repl) imports __no__ libraries by default. For that matter, neither `npm install -g purescript` nor `npm install -g pulp` will even download the core libraries for you. You'll need to use bower (`npm install -g bower`) to pull them down into your development folder. __TODO:__ remember how to download all of the core libraries without getting each one individually.
 
-##### Importing Errors
-###### Unknown module Prelude
+#### Importing Errors
+##### Unknown module Prelude
 ```
 Error found:
 in module $PSCI.Support
@@ -22,7 +22,7 @@ __Diagnosis:__ If you get this when you try to do _anything_ in psci, you probab
 
 __Fix:__ `pulp init` to get a project, `npm install purescript` in that project to get psci's runtime dependencies (like Prelude).
 
-###### Unkown value (+) [or whatever]
+##### Unkown value (+) [or whatever]
 ```
 > 3 + 3
 Error found:
@@ -36,4 +36,5 @@ See https://github.com/purescript/purescript/wiki/Error-Code-UnknownValue for mo
 or to contribute content related to this error.
 ```
 __Diagnosis:__ You might think something as basic as 2 + 2 shouldn't need any libraries, but + is actually defined in Prelude. The compiler has special handling for addition, and the repl needs Prelude to display this error, but they won't share their copies. You gotta get your own.
+
 __Fix:__ In the repl, run `import Prelude` to get everything defined in Prelude dumped into your namespace.
