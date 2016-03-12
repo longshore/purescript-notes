@@ -64,18 +64,18 @@ We can sort of name our parameters by using a row type:
 data RationalNumberType2 = RationalNumber2 { numerator :: Int, denominator :: Int }
 let fourSevenths = RationalNumber2 { numerator: 4, denominator: 7 }
 ```
-`RationalNumber2` is now a function that takes _one_ parameter, an object that has `Int` fields named `numerator` and `denominator` (which may also have other fields, but they wouldn't do anything.)
+`RationalNumber2` is now a function that takes _one_ parameter, an object that has `Int` fields named `numerator` and `denominator` (it may also have other fields, but they wouldn't do anything.)
 
 Remember, two colons to declare type of object field, one colon to declare value of field! If you write `RationalNumber2 { numerator = 5, denominator = 9 } `, you'll get some kind of error about not being able to match types. That implies that `{ foo = 5 }` is valid syntax for _something_ but I have no idea what.
 
 Constructors can be mixed and matched freely:
 ```
-data Color = Black | White | Red | RGB Int Int Int | CMYK Int Int Int Number`
+data Color = Black | White | Red | RGB Int Int Int | CMYK Int Int Int Number
 ```
 
 They can even be recursive: 
 ```
-data Royalty = Monarch String | Spouse Royalty | Child Royalty Royalty`
+data Royalty = Monarch String | Spouse Royalty | Child Royalty Royalty
 let louisXIV = Monarch "France"
 let maria = Spouse louisXIV
 let louisJr = Child louisXIV maria
