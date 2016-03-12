@@ -54,7 +54,7 @@ Constructors with parameters: `data RationalNumberType = RationalNumber Int Int`
 Our new type `RationalNumberType` is exactly the same kind of type as `ThingType` or `Atom` or `TriBool`. It's the constructor and shape of its values that are different. If you enter `:t RationalNumber` to check its type, you'll get `Int -> Int -> RationalNumberType` - the type of `RationalNumber` isn't `RationalNumberType`! It's a function that, given two `Ints`, returns a value of type `RationalNumberType`. We can use it like any other function - curry it, `map` it, bind it to other names, etc. Constructors will always be values - they'll either be a value of the type directly (like `Thing` or `Yes`) or a function (functions are values) that ultimately returns a value of that type. Note that we declare the types of `RationalNumber`'s parameters differently than with regular function syntax. If we were defining division as a non-constructor function, we would say:
 
 ```
-let integerDivisionWithFloatingPointRemainder numerator denominator = (Data.Int.toNumber numerator) / (Data.Int.toNumber denominator)
+let otherDivision numerator denominator = (Data.Int.toNumber numerator) / (Data.Int.toNumber denominator)
 ```
 
 and the compiler would infer that the arguments `numerator` and `denominator` must be `Int`s (because `Data.Int.toNumber` only works on `Int`s) and that the return type must be `Number` because that's what division by a `Number` returns. With RationalNumber, we had to specify the argument types (`Int`) and return type (`RationalNumberType`) explicitly. As a side effect of this, we have no way to name its parameters! We have to hope our user knows the convention that the first `Int` is the numerator and the second is the denominator.
@@ -64,12 +64,29 @@ We can sort of name our parameters by using a row type:
 data RationalNumberType2 = RationalNumber2 { numerator :: Int, denominator :: Int }
 let fourSevenths = RationalNumber2 { numerator: 4, denominator: 7 }
 ```
+`RationalNumber2` is now a function that takes _one_ parameter, an object that has `Int` fields named `numerator` and `denominator` (which may also have other fields, but they wouldn't do anything.)
 
-Remember, two colons to declare type of object field, one colon to declare value of field! If you do this:
+Remember, two colons to declare type of object field, one colon to declare value of field! If you write `RationalNumber2 { numerator = 5, denominator = 9 } `, you'll get some kind of error about not being able to match types. That implies that `{ foo = 5 }` is valid syntax for _something_ but I have no idea what.
+
+Constructors can be mixed and matched freely:
 ```
-let wrongBadDoNotDoThis = RationalNumber2 { numerator = 5, denominator = 9 }
+data Color = Black | White | Red | RGB Int Int Int | CMYK Int Int Int Number`
 ```
 
-you'll get some kind of error about not being able to match types. That implies that { foo = 5 } is valid syntax for _something_ but I have no idea what.
+They can even be recursive: 
+```
+data Royalty = Monarch String | Spouse Royalty | Child Royalty Royalty`
+let louisXIV = Monarch "France"
+let maria = Spouse louisXIV
+let louisJr = Child louisXIV maria
+```
+
+although the values themselves cannot recurse. `let nero = Spouse nero` will fail with Error-Code-CycleInDeclaration. Sorry, Nero.
+
+There's no requirement for recursive types to have a 'base case':
+```
+data UselessRecursion = Recurse UselessRecursion
+```
+I don't think you could ever actually instantiate a value of type `UselessRecursion` but you can certainly declare the type! `Recurse` is a perfectly ordinary constructor function. `map Recurse []` will even get you an empty array of type `Array UselessRecursion`.
 
 *except for the `Boolean` type's values, `true` and `false`. Presumably they're lowercase because JavaScript.
