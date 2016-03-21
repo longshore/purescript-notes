@@ -70,7 +70,7 @@ Remember, two colons to declare type of object field, one colon to declare value
 
 Constructors can be mixed and matched freely:
 ```
-data Color = Black | White | Red | RGB Int Int Int | CMYK Int Int Int Number
+data Color = Black | White | Red | RGB Int Int Int | CMYK { cyan :: Int, magenta :: Int, yellow :: Int } Number
 ```
 
 They can even be recursive: 
