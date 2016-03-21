@@ -43,11 +43,13 @@ __Fix:__ In the repl, run `import Prelude` to get everything defined in Prelude 
 
 Simplest form: `data ThingType = Thing`
 
-The first word after `data` is the name of the type. The first word after `=` and each `|` are the name(s) of your type's constructor(s). (Constructors are values.) Note that the type and all constructors must be Capitalized.* Here, `Thing` is a value of type `ThingType`, and `ThingType` is a type of kind `*`. Values and types have their own namespaces, so `data Atom = Atom` is legal and idiomatic. There's no case were both a type and a value are both syntactically legal, so there's never any ambiguity. (because types are not first class values?)
+The first word after `data` is the name of the type. The first word after `=` and each `|` are the name(s) of your type's constructor(s). (Constructors are values.) Note that the type and all constructors must be Capitalized.† Here, `Thing` is a value of type `ThingType`, and `ThingType` is a type of kind `*`. Values and types have their own namespaces, so `data Atom = Atom` is legal and idiomatic. There's no case were both a type and a value are both syntactically legal, so there's never any ambiguity. (because types are not first class values?)
+
+†except for the `Boolean` type's values, `true` and `false`. Presumably they're lowercase because JavaScript.
 
 Multiple constructors: `data TriBool = Yes | No | Maybe`
 
-`TriBool` here has three values/constructors: `Yes`, `No`, and `Maybe`. There's also a `Maybe` type defined in `Data.Maybe`; we can have both `TriBool` and the `Maybe` type in the same scope no problem, because our `Maybe` is a value and values and types have different namespaces. Don't actually do this though, it's confusing. If you're ever
+`TriBool` here has three values/constructors: `Yes`, `No`, and `Maybe`. There's also a `Maybe` type defined in `Data.Maybe`; we can have both `TriBool` and the `Maybe` type in the same scope no problem, because our `Maybe` is a value and values and types have different namespaces. Don't actually do this though, it's confusing.
 
 Constructors with parameters: `data RationalNumberType = RationalNumber Int Int`
 
@@ -88,5 +90,3 @@ There's no requirement for recursive types to have a 'base case':
 data UselessRecursion = Recurse UselessRecursion
 ```
 I don't think you could ever actually instantiate a value of type `UselessRecursion` but you can certainly declare the type! `Recurse` is a perfectly ordinary constructor function. `map Recurse []` will even get you an empty array of type `Array UselessRecursion`.
-
-*except for the `Boolean` type's values, `true` and `false`. Presumably they're lowercase because JavaScript.
