@@ -41,17 +41,17 @@ __Fix:__ In the repl, run `import Prelude` to get everything defined in Prelude 
 
 ## Algebraic Data Types: The `data` keyword
 
-Simplest form: `data ThingType = Thing`
+__Simplest form:__ `data ThingType = Thing`
 
 The first word after `data` is the name of the type. The first word after `=` and each `|` are the name(s) of your type's constructor(s). (Constructors are values.) Note that the type and all constructors must be Capitalized.† Here, `Thing` is a value of type `ThingType`, and `ThingType` is a type of kind `*`. Values and types have their own namespaces, so `data Atom = Atom` is legal and idiomatic. There's no case were both a type and a value are both syntactically legal, so there's never any ambiguity. (because types are not first class values?)
 
 †except for the `Boolean` type's values, `true` and `false`. Presumably they're lowercase because JavaScript.
 
-Multiple constructors: `data TriBool = Yes | No | Maybe`
+__Multiple constructors:__ `data TriBool = Yes | No | Maybe`
 
 `TriBool` here has three values/constructors: `Yes`, `No`, and `Maybe`. There's also a `Maybe` type defined in `Data.Maybe`; we can have both `TriBool` and the `Maybe` type in the same scope no problem, because our `Maybe` is a value and values and types have different namespaces. Don't actually do this though, it's confusing.
 
-Constructors with parameters: `data RationalNumberType = RationalNumber Int Int`
+__Constructors with parameters:__ `data RationalNumberType = RationalNumber Int Int`
 
 Our new type `RationalNumberType` is exactly the same kind of type as `ThingType` or `Atom` or `TriBool`. It's the constructor and shape of its values that are different. If you enter `:t RationalNumber` to check its type, you'll get `Int -> Int -> RationalNumberType` - the type of `RationalNumber` isn't `RationalNumberType`! It's a function that, given two `Ints`, returns a value of type `RationalNumberType`. We can use it like any other function - curry it, `map` it, bind it to other names, etc. Constructors will always be values - they'll either be a value of the type directly (like `Thing` or `Yes`) or a function (functions are values) that ultimately returns a value of that type. Note that we declare the types of `RationalNumber`'s parameters differently than with regular function syntax. If we were defining division as a non-constructor function, we would say:
 
@@ -61,12 +61,12 @@ let otherDivision numerator denominator = (Data.Int.toNumber numerator) / (Data.
 
 and the compiler would infer that the arguments `numerator` and `denominator` must be `Int`s (because `Data.Int.toNumber` only works on `Int`s) and that the return type must be `Number` because that's what division by a `Number` returns. With RationalNumber, we had to specify the argument types (`Int`) and return type (`RationalNumberType`) explicitly. As a side effect of this, we have no way to name its parameters! We have to hope our user knows the convention that the first `Int` is the numerator and the second is the denominator.
 
-We can sort of name our parameters by using a row type:
+We can sort of name our parameters by using a __constructor with a row type:__
 ```
 data RationalNumberType2 = RationalNumber2 { numerator :: Int, denominator :: Int }
 let fourSevenths = RationalNumber2 { numerator: 4, denominator: 7 }
 ```
-`RationalNumber2` is now a function that takes _one_ parameter, an object that has `Int` fields named `numerator` and `denominator` (it may also have other fields, but they wouldn't do anything.)
+`RationalNumber2` is now a function that takes _one_ parameter: an object that has `Int` fields named `numerator` and `denominator` (it may also have other fields, but they wouldn't do anything.)
 
 Remember, two colons to declare type of object field, one colon to declare value of field! If you write `RationalNumber2 { numerator = 5, denominator = 9 } `, you'll get some kind of error about not being able to match types. That implies that `{ foo = 5 }` is valid syntax for _something_ but I have no idea what.
 
