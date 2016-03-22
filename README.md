@@ -177,7 +177,7 @@ See https://github.com/purescript/purescript/wiki/Error-Code-TypesDoNotUnify for
 or to contribute content related to this error.
 ```
 
-Purescript does not have the concept of a generic type like "Meta t4 where t4 is either Int or String". You can have discriminated unions; they're just their own type:
+Purescript does not have the concept of a generic type like "Meta t4 where t4 is either Int or String". It has discriminated unions; they're just their own type, not a language feature:
 
 ```
 > import Data.Either
