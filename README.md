@@ -106,7 +106,7 @@ __Simplest form:__ `data Meta foo = StrangeAtom`
 
 ‡Purescript does not call these metatypes. I'm calling them that.
 
-Naming things is hard. Purescript's name for "the kind of things that have values" is `*`, which might be more familiar to you as magickal shorthand for the Eye of Horus. `->` is the function pseudoconstructor (an infix - it's parameterized by the `*`s both sides). So is `Meta` a function? Not in the Purescript sense: functions are first-class values, while types and metatypes can only be used in places like type annotation. `Meta` is definitely in the latter category. In the mathematical sense, `Meta` is very much a function that maps one type (or other thing of kind `*`) to another, like so:
+Naming things is hard. Purescript's name for "the kind of things that have values" is `*`, which might be more familiar to you as magickal shorthand for the Eye of Horus. `->` is the function pseudoconstructor (an infix - it's parameterized by the `*`s on both sides). So is `Meta` a function? Not in the Purescript sense: functions are first-class values, while types and metatypes can only be used in places like type annotation. `Meta` is definitely in the latter category. In the mathematical sense, `Meta` is very much a function that maps one type (or other thing of kind `*`) to another, like so:
 
 ```
 > :k Meta ThingType
