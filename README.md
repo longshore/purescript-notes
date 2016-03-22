@@ -93,7 +93,7 @@ I don't think you could ever actually instantiate a value of type `UselessRecurs
 
 ###Metatypes
 
-__Simplest form:__ `data Meta foo = SpecialAtom`
+__Simplest form:__ `data Meta foo = StrangeAtom`
 
 `Meta` is our first metatype.‡ A metatype is a lot like a type; in some contexts types and metatypes can be used interchangeably, other times they act more like a function. However, metatypes are fundamentally a different _kind_ of thing than types. We can see this by checking a metatype's kind with the `:k` PSCI command:
 
@@ -117,4 +117,74 @@ Naming things is hard. Purescript's name for "the kind of things that have value
 *
 ```
 
+Note that `Meta Meta` will yield an error; `Meta` expects a thing of kind `*`, but we gave it `Meta`, which is of kind `* -> *`. We will see how to declare metatypes of kind `(* -> *) -> *` soon.
 
+`StrangeAtom` is a value, but `Meta` isn't the kind of thing that can have values. So what is `StrangeAtom`'s type? Check in the interpreter:
+
+```
+> :t StrangeAtom
+forall t4. Meta t4
+```
+
+Without annotations, the we can't say anything more specific than that `StrangeAtom` falls in the `Meta` family. Or rather, we can say with specificity that its type is the quantum superposition of `Meta t4`s for all possible types `t4`. We can collapse the superposition with type annotations:
+
+```
+> let strangeQ = StrangeAtom
+> :t strangeQ
+forall t4. Meta t4
+> let strangeInt = StrangeAtom :: Meta Int
+> :t strangeInt
+Meta Int
+> let strangeString = StrangeAtom :: Meta String
+> :t strangeString
+Meta String
+```
+
+or by forcing Purescript to unify the type `Meta t4` with a collapsed StrangeAtom:
+
+```
+> :t if true then strangeQ else strangeInt
+Meta Int
+> :t if true then strangeQ else strangeString
+Meta String
+```
+
+We _cannot_ go the opposite direction and get the typefamily back from two different types:
+
+```
+> :t if true then strangeInt else strangeString
+Error found:
+in module $PSCI
+at  line 1, column 1 - line 1, column 31
+
+  Could not match type
+
+    Int
+
+  with type
+
+    String
+
+
+while trying to match type Meta Int
+  with type Meta String
+while inferring the type of if true
+                              then strangeInt
+                              else strangeString
+in value declaration it
+
+See https://github.com/purescript/purescript/wiki/Error-Code-TypesDoNotUnify for more information,
+or to contribute content related to this error.
+```
+
+Purescript does not have the concept of a generic type like "Meta t4 where t4 is either Int or String". You can have discriminated unions; they're just their own type:
+
+```
+> import Data.Either
+> :t Left strangeInt
+forall t5. Either (Meta Int) t5
+> :t Right strangeString
+forall t6. Either t6 (Meta String)
+> :t if true then Left strangeInt else Right strangeString
+Either (Meta Int) (Meta String)
+```
