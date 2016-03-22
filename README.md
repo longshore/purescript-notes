@@ -90,3 +90,31 @@ There's no requirement for recursive types to have a 'base case':
 data UselessRecursion = Recurse UselessRecursion
 ```
 I don't think you could ever actually instantiate a value of type `UselessRecursion` but you can certainly declare the type! `Recurse` is a perfectly ordinary constructor function. `map Recurse []` will even get you an empty array of type `Array UselessRecursion`.
+
+###Metatypes
+
+__Simplest form:__ `data Meta foo = SpecialAtom`
+
+`Meta` is our first metatype.‡ A metatype is a lot like a type; in some contexts types and metatypes can be used interchangeably, other times they act more like a function. However, metatypes are fundamentally a different _kind_ of thing than types. We can see this by checking a metatype's kind with the `:k` PSCI command:
+
+```
+> :k ThingType
+*
+> :k Meta
+* -> *
+```
+
+‡Purescript does not call these metatypes. I'm calling them that.
+
+Naming things is hard. Purescript's name for "the kind of things that have values" is `*`, which might be more familiar to you as magickal shorthand for the Eye of Horus. `->` is the function pseudoconstructor (an infix - it's parameterized by the `*`s both sides). So is `Meta` a function? Not in the Purescript sense: functions are first-class values, while types and metatypes can only be used in places like type annotation. `Meta` is definitely in the latter category. In the mathematical sense, `Meta` is very much a function that maps one type (or other thing of kind `*`) to another, like so:
+
+```
+> :k Meta ThingType
+*
+> :k Meta (Meta ThingType) -- note the left associativity!
+*
+> :k Meta { count :: Int }
+*
+```
+
+
