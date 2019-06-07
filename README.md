@@ -3,7 +3,9 @@ Notes as I'm learning the Purescript language
 
 ## The `import` Keyword
 
-psci (the Purescript repl) imports __no__ libraries by default. For that matter, neither `npm install -g purescript` nor `npm install -g pulp` will even download the core libraries for you. You'll need to use bower (`npm install -g bower`) to pull them down into your development folder. __TODO:__ remember how to download all of the core libraries without getting each one individually.
+psci (the Purescript repl) imports __no__ libraries by default. For that matter, neither `npm install -g purescript` nor `npm install -g pulp` will even download the core libraries for you. You'll need to use bower (`npm install -g bower`) to pull them down into your development folder.
+
+As of June 2019 `npm install -g purescript pulp bower; pulp init; pulp repl` (or `pulp psci`) apears to be all you need to get a working repl (with Prelude imported, etc). 
 
 #### Importing Errors
 ##### Unknown module Prelude
@@ -91,7 +93,7 @@ data UselessRecursion = Recurse UselessRecursion
 ```
 I don't think you could ever actually instantiate a value of type `UselessRecursion` but you can certainly declare the type! `Recurse` is a perfectly ordinary constructor function. `map Recurse []` will even get you an empty array of type `Array UselessRecursion`.
 
-###Metatypes
+### Metatypes
 
 __Simplest form:__ `data Meta foo = StrangeAtom`
 
